@@ -1327,8 +1327,7 @@
       <p>实验原理：仔细想，仔细写，慢慢体会。</p>
       <main id="miffyResumePreview"></main>
       <script>
-        const sixXML = `<?xml version="1.0" encoding="gb2312" standalone="no"?>
-<!DOCTYPE 学生 SYSTEM "student.dtd">
+        const sixXML = `
 <?xml-stylesheet type="text/xsl" href="student.xsl"?>
 <学生>
 <个人基本信息>
@@ -1369,7 +1368,7 @@
 </已发表论文>
 </学生>
 `;
-        const sixXSL = `<?xml version="1.0" encoding="UTF-8"?>
+        const sixXSL = `
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:template match="/">
     <html>
