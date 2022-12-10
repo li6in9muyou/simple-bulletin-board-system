@@ -1325,6 +1325,10 @@
     <section id="miffyResume">
       <h1>第六次作业，输出复杂HTML</h1>
       <p>实验原理：仔细想，仔细写，慢慢体会。</p>
+      <p>
+        为了实现老师要求的云端进行 XSLT 转换的要求，我在 Azure
+        上部署了一个云函数。XML和XSL数据将通过http请求发送到此云函数完成转换。
+      </p>
       <main id="miffyResumePreview"></main>
       <script>
         const sixXML = `
@@ -1371,7 +1375,7 @@
         const sixXSL = `
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:template match="/">
-    <html>
+    <html lang="zh">
       <style>
 th {
      background-color: lightgreen;
@@ -1385,7 +1389,7 @@ table, td, th {
      border: black 1px solid;
 }
 
-#selfie {
+img {
      object-fit: contain;
      height: 300px;
      width:300px;
@@ -1409,7 +1413,7 @@ ul {
               <xsl:value-of select="学生/个人基本信息/姓名"></xsl:value-of>
             </td>
             <td rowSpan="6">
-              <img id="selfie">
+              <img alt="selfie of resume owner" src="">
                 <xsl:attribute name="src">
                   <xsl:value-of select="学生/个人基本信息/照片"></xsl:value-of>
                 </xsl:attribute>
