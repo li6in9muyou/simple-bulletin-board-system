@@ -1203,13 +1203,29 @@
       <script src="https://cdn.jsdelivr.net/npm/xml-beautify@1.2.3/dist/XmlBeautify.js"></script>
       <script>
         function renderPreview(xmlText, xslText, previewSelector) {
-          const p = new DOMParser();
-          const xml = p.parseFromString(xmlText, "application/xml");
-          const xsl = p.parseFromString(xslText, "application/xml");
-          const trans = new XSLTProcessor();
-          trans.importStylesheet(xsl);
-          const nodes = trans.transformToFragment(xml, document);
-          document.querySelector(previewSelector).replaceChildren(nodes);
+          xmlText = xmlText.replace(/<\?.*\?>[\r\n]/, "");
+          xslText = xslText.replace(/<\?.*\?>[\r\n]/, "");
+          fetch(
+            "https://xsl-transform-fn.azurewebsites.net/api/xsl-transform",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                xsl: xslText,
+                xml: xmlText,
+              }),
+            }
+          )
+            .catch(console.error)
+            .then((resp) => resp.text())
+            .then((text) => {
+              const nodes = new DOMParser().parseFromString(text, "text/html");
+              document
+                .querySelector(previewSelector)
+                .replaceChildren(...nodes.childNodes);
+            });
         }
       </script>
       <script>
