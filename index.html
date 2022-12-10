@@ -1322,5 +1322,201 @@
         });
       </script>
     </section>
+    <section id="miffyResume">
+      <h1>第六次作业，输出复杂HTML</h1>
+      <p>实验原理：仔细想，仔细写，慢慢体会。</p>
+      <main id="miffyResumePreview"></main>
+      <script>
+        const sixXML = `<?xml version="1.0" encoding="gb2312" standalone="no"?>
+<!DOCTYPE 学生 SYSTEM "student.dtd">
+<?xml-stylesheet type="text/xsl" href="student.xsl"?>
+<学生>
+<个人基本信息>
+<照片>miffy.jpg</照片>
+<姓名>米菲</姓名>
+<性别>女</性别>
+<民族>兔佳族</民族>
+<出生地>大荷兰</出生地>
+<通讯地址>
+ <条目>130012</条目>
+ <条目>吉林省长春市前进大街 2699 号</条目>
+ <条目>吉林大学计算机科学与技术学院</条目>
+</通讯地址>
+<电子邮件>miffy@yahoo.com</电子邮件>
+</个人基本信息>
+<学历和工作简历>
+<条目>2003 年毕业于吉林大学附属小学</条目>
+<条目>2006 年毕业于吉林大学附属中学初中部</条目>
+<条目>2009 年毕业于吉林大学附属中学高中部</条目>
+<条目>2013 年毕业于吉林大学计算机学院</条目>
+<条目>2012.07 至 2012.09 在吉林大学就业指导中心实习</条目>
+</学历和工作简历>
+<已修课程>
+<条目>数据结构</条目>
+<条目>数据库原理</条目>
+<条目>C 语言程序设计</条目>
+<条目>Java 语言程序设计</条目>
+<条目>Web 应用开发基础</条目>
+<条目>XML 语言</条目>
+</已修课程>
+<已获奖励>
+<条目>2012 获中国大学生创新项目一等奖</条目>
+<条目>2013 获中国大学生软件竞赛一等奖</条目>
+</已获奖励>
+<已发表论文>
+<条目>人机对话中关键技术的探索，2011 年发表于《机器与人》创刊号第 1 页</条目>
+<条目>米菲家族祖先追踪，2012 年发表于《物种起源》卷 99999 第 8888 页</条目>
+</已发表论文>
+</学生>
+`;
+        const sixXSL = `<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:template match="/">
+    <html>
+      <style>
+th {
+     background-color: lightgreen;
+}
+
+th, td {
+     padding:8px;
+}
+
+table, td, th {
+     border: black 1px solid;
+}
+
+#selfie {
+     object-fit: contain;
+     height: 300px;
+     width:300px;
+}
+
+ul {
+     margin-top:0;
+     margin-bottom:0;
+}
+
+</style>
+      <body>
+        <h2>
+          <xsl:value-of select="学生/个人基本信息/姓名/text()"></xsl:value-of>
+          <span>的简历</span>
+        </h2>
+        <table>
+          <tr>
+            <th>姓名</th>
+            <td>
+              <xsl:value-of select="学生/个人基本信息/姓名"></xsl:value-of>
+            </td>
+            <td rowSpan="6">
+              <img id="selfie">
+                <xsl:attribute name="src">
+                  <xsl:value-of select="学生/个人基本信息/照片"></xsl:value-of>
+                </xsl:attribute>
+              </img>
+            </td>
+          </tr>
+          <tr>
+            <th>性别</th>
+            <td>
+              <xsl:value-of select="学生/个人基本信息/性别"></xsl:value-of>
+            </td>
+          </tr>
+          <tr>
+            <th>民族</th>
+            <td>
+              <xsl:value-of select="学生/个人基本信息/民族"></xsl:value-of>
+            </td>
+          </tr>
+          <tr>
+            <th>出生地</th>
+            <td>
+              <xsl:value-of select="学生/个人基本信息/出生地"></xsl:value-of>
+            </td>
+          </tr>
+          <tr>
+            <th>通讯地址</th>
+            <td>
+              <ul>
+                <xsl:for-each select="学生/个人基本信息/通讯地址/条目">
+                  <li>
+                    <xsl:value-of select="text()"></xsl:value-of>
+                  </li>
+                </xsl:for-each>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>电邮</th>
+            <td>
+              <xsl:value-of select="学生/个人基本信息/电子邮件"></xsl:value-of>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="3">学历和工作简介</th>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <ul>
+                <xsl:for-each select="学生/学历和工作简历/条目">
+                  <li>
+                    <xsl:value-of select="text()"></xsl:value-of>
+                  </li>
+                </xsl:for-each>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="3">已修课程</th>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <ul>
+                <xsl:for-each select="学生/已修课程/条目">
+                  <li>
+                    <xsl:value-of select="text()"></xsl:value-of>
+                  </li>
+                </xsl:for-each>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="3">已获奖励</th>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <ul>
+                <xsl:for-each select="学生/已获奖励/条目">
+                  <li>
+                    <xsl:value-of select="text()"></xsl:value-of>
+                  </li>
+                </xsl:for-each>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="3">已发表论文</th>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <ul>
+                <xsl:for-each select="学生/已发表论文/条目">
+                  <li>
+                    <xsl:value-of select="text()"></xsl:value-of>
+                  </li>
+                </xsl:for-each>
+              </ul>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  </xsl:template>
+</xsl:stylesheet>
+`;
+        renderPreview(sixXML, sixXSL, "#miffyResumePreview");
+      </script>
+    </section>
   </body>
 </html>
