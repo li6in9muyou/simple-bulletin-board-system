@@ -1209,7 +1209,7 @@
       </script>
       <script src="https://cdn.jsdelivr.net/npm/xml-beautify@1.2.3/dist/XmlBeautify.js"></script>
       <script>
-        function renderPreview(xmlText, xslText, previewSelector) {
+        function renderPreview(xmlText, xslText, previewContainer) {
           xmlText = xmlText.replace(/<\?.*\?>[\r\n]/, "");
           xslText = xslText.replace(/<\?.*\?>[\r\n]/, "");
           fetch(
@@ -1228,10 +1228,14 @@
             .catch(console.error)
             .then((resp) => resp.text())
             .then((text) => {
-              const nodes = new DOMParser().parseFromString(text, "text/html");
-              document
-                .querySelector(previewSelector)
-                .replaceChildren(...nodes.childNodes);
+              const preview = document.createElement("iframe");
+              document.querySelector(previewContainer).replaceChildren(preview);
+              preview.contentWindow.document.write(text);
+
+              preview.style.border = "none";
+              preview.contentDocument.documentElement.style.overflow = "hidden";
+              preview.height = `${preview.contentDocument.body.scrollHeight}`;
+              preview.width = `${preview.contentDocument.body.scrollWidth}`;
             });
         }
       </script>
