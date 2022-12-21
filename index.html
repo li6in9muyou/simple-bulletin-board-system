@@ -1212,6 +1212,9 @@
         function renderPreview(xmlText, xslText, previewContainer) {
           xmlText = xmlText.replace(/<\?.*\?>[\r\n]/, "");
           xslText = xslText.replace(/<\?.*\?>[\r\n]/, "");
+          document
+            .querySelector(previewContainer)
+            .replaceChildren(document.createTextNode("加载中"));
           fetch(
             "https://xsl-transform-fn.azurewebsites.net/api/xsl-transform",
             {
