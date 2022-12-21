@@ -1548,5 +1548,280 @@ ul {
         renderPreview(sixXML, sixXSL, "#miffyResumePreview");
       </script>
     </section>
+    <section id="staticSiteGenerator">
+      <h1>第七次作业，静态网站生成器</h1>
+      <p>
+        待写：说明网页的设计、开发和测试；描述如何实现数据与显示页面相互分离；解释如何实现活动操作；
+      </p>
+      <script>
+        const Server = {
+          pages: {
+            scenery: `<?xml version="1.0" encoding="UTF-8"?>
+<Page name="景观介绍">
+  <Scene>
+    <Title href="https://google.com/search?q=长春景观&amp;tbm=isch">
+        长春
+    </Title>
+    <Description>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a sem bibendum, cursus eros eget, cursus lectus. Donec eu elit vitae odio tincidunt varius. Mauris elit lorem, porttitor ac nulla et, malesuada eleifend urna. Mauris vestibulum imperdiet vulputate. Sed eget faucibus est. Duis pellentesque rhoncus velit quis semper. In rhoncus lectus convallis auctor mollis. Aliquam imperdiet turpis eget egestas dapibus. Phasellus maximus, dolor a efficitur posuere, ex est tincidunt enim, sed accumsan odio velit vitae mauris. Pellentesque interdum iaculis mauris.
+Aliquam fermentum odio non sapien volutpat, sit amet viverra velit consectetur. Vivamus orci dui, gravida vitae feugiat ut, malesuada non ex. Nunc non massa sit amet ante posuere aliquam quis id arcu. Maecenas tempor metus eget libero efficitur dignissim. In varius viverra sapien id venenatis. Aenean mollis dolor eget facilisis feugiat. Donec varius lacus a rhoncus malesuada. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus quis tellus quam. Praesent facilisis, lacus at pulvinar condimentum, augue turpis pharetra orci, et mattis turpis turpis eu ante. Etiam at vehicula sem. Curabitur est eros, volutpat id finibus a, volutpat quis metus.
+Sed eu aliquet urna. Curabitur ornare ante vehicula lorem rhoncus maximus. Vivamus quis facilisis nibh, eget tempus diam. Ut quis purus malesuada, rutrum est eu, luctus orci. Sed pretium, justo condimentum ultrices feugiat, ipsum felis tincidunt purus, at dapibus arcu metus at magna. Pellentesque pulvinar consectetur ornare. Etiam finibus lacus at pulvinar vestibulum. Aenean libero libero, vulputate viverra orci imperdiet, eleifend molestie velit. Nam tincidunt a dui id malesuada. Fusce bibendum nunc at ligula accumsan bibendum. Nam sit amet libero mollis, laoreet neque nec, molestie leo. Suspendisse potenti. Sed fermentum, sapien et maximus tincidunt, est arcu porta odio, quis efficitur libero turpis nec nisl.
+    </Description>
+    <Pic>https://via.placeholder.com/500x350?text=changchun+1</Pic>
+    <Pic>https://via.placeholder.com/500x350?text=changchun+2</Pic>
+  </Scene>
+  <Scene>
+    <Title href="https://google.com/search?q=纽约景观&amp;tbm=isch">
+        纽约
+    </Title>
+    <Description>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a sem bibendum, cursus eros eget, cursus lectus. Donec eu elit vitae odio tincidunt varius. Mauris elit lorem, porttitor ac nulla et, malesuada eleifend urna. Mauris vestibulum imperdiet vulputate. Sed eget faucibus est. Duis pellentesque rhoncus velit quis semper. In rhoncus lectus convallis auctor mollis. Aliquam imperdiet turpis eget egestas dapibus. Phasellus maximus, dolor a efficitur posuere, ex est tincidunt enim, sed accumsan odio velit vitae mauris. Pellentesque interdum iaculis mauris.
+Aliquam fermentum odio non sapien volutpat, sit amet viverra velit consectetur. Vivamus orci dui, gravida vitae feugiat ut, malesuada non ex. Nunc non massa sit amet ante posuere aliquam quis id arcu. Maecenas tempor metus eget libero efficitur dignissim. In varius viverra sapien id venenatis. Aenean mollis dolor eget facilisis feugiat. Donec varius lacus a rhoncus malesuada. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus quis tellus quam. Praesent facilisis, lacus at pulvinar condimentum, augue turpis pharetra orci, et mattis turpis turpis eu ante. Etiam at vehicula sem. Curabitur est eros, volutpat id finibus a, volutpat quis metus.
+Sed eu aliquet urna. Curabitur ornare ante vehicula lorem rhoncus maximus. Vivamus quis facilisis nibh, eget tempus diam. Ut quis purus malesuada, rutrum est eu, luctus orci. Sed pretium, justo condimentum ultrices feugiat, ipsum felis tincidunt purus, at dapibus arcu metus at magna. Pellentesque pulvinar consectetur ornare. Etiam finibus lacus at pulvinar vestibulum. Aenean libero libero, vulputate viverra orci imperdiet, eleifend molestie velit. Nam tincidunt a dui id malesuada. Fusce bibendum nunc at ligula accumsan bibendum. Nam sit amet libero mollis, laoreet neque nec, molestie leo. Suspendisse potenti. Sed fermentum, sapien et maximus tincidunt, est arcu porta odio, quis efficitur libero turpis nec nisl.
+    </Description>
+    <Pic>https://via.placeholder.com/500x350?text=new+york+1</Pic>
+    <Pic>https://via.placeholder.com/500x350?text=new+york+2</Pic>
+  </Scene>
+  <Scene>
+    <Title href="https://google.com/search?q=广州景观&amp;tbm=isch">
+        广州
+    </Title>
+    <Description>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a sem bibendum, cursus eros eget, cursus lectus. Donec eu elit vitae odio tincidunt varius. Mauris elit lorem, porttitor ac nulla et, malesuada eleifend urna. Mauris vestibulum imperdiet vulputate. Sed eget faucibus est. Duis pellentesque rhoncus velit quis semper. In rhoncus lectus convallis auctor mollis. Aliquam imperdiet turpis eget egestas dapibus. Phasellus maximus, dolor a efficitur posuere, ex est tincidunt enim, sed accumsan odio velit vitae mauris. Pellentesque interdum iaculis mauris.
+Aliquam fermentum odio non sapien volutpat, sit amet viverra velit consectetur. Vivamus orci dui, gravida vitae feugiat ut, malesuada non ex. Nunc non massa sit amet ante posuere aliquam quis id arcu. Maecenas tempor metus eget libero efficitur dignissim. In varius viverra sapien id venenatis. Aenean mollis dolor eget facilisis feugiat. Donec varius lacus a rhoncus malesuada. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus quis tellus quam. Praesent facilisis, lacus at pulvinar condimentum, augue turpis pharetra orci, et mattis turpis turpis eu ante. Etiam at vehicula sem. Curabitur est eros, volutpat id finibus a, volutpat quis metus.
+Sed eu aliquet urna. Curabitur ornare ante vehicula lorem rhoncus maximus. Vivamus quis facilisis nibh, eget tempus diam. Ut quis purus malesuada, rutrum est eu, luctus orci. Sed pretium, justo condimentum ultrices feugiat, ipsum felis tincidunt purus, at dapibus arcu metus at magna. Pellentesque pulvinar consectetur ornare. Etiam finibus lacus at pulvinar vestibulum. Aenean libero libero, vulputate viverra orci imperdiet, eleifend molestie velit. Nam tincidunt a dui id malesuada. Fusce bibendum nunc at ligula accumsan bibendum. Nam sit amet libero mollis, laoreet neque nec, molestie leo. Suspendisse potenti. Sed fermentum, sapien et maximus tincidunt, est arcu porta odio, quis efficitur libero turpis nec nisl.
+    </Description>
+    <Pic>https://via.placeholder.com/500x350?text=guangzhou+1</Pic>
+    <Pic>https://via.placeholder.com/500x350?text=guangzhou+2</Pic>
+  </Scene>
+</Page>
+`,
+            about: `<?xml version="1.0" encoding="UTF-8"?>
+<Page name="自我介绍">
+  <PageData>
+    学号是5520xxxx，班级是5520xx，姓名是李秉木又。
+    自我简介是我叫李秉木又，我不喜欢自己的生活。
+  </PageData>
+</Page>`,
+            moviesBooksHobbies: `<?xml version="1.0" encoding="UTF-8"?>
+<Page name="电影、书籍介绍以及兴趣爱好">
+  <Hobby href="https://www.google.com">
+    <Title>遨游因特网</Title>
+    <Description>
+          在因特网上遨游，畅游在知识的海洋
+    </Description>
+    <Comment>
+        欢乐无穷
+    </Comment>
+  </Hobby>
+  <Movie href="https://www.imdb.com/title/tt0099785/">
+    <Title>Home Alone 1990</Title>
+    <Description>
+          An eight-year-old troublemaker
+          must protect his house from a pair of burglars
+          when he is accidentally left home alone
+          by his family during Christmas vacation.
+    </Description>
+    <Pic>https://via.placeholder.com/350x150?text=movie+screenshot+1</Pic>
+    <Pic>https://via.placeholder.com/350x150?text=movie+screenshot+2</Pic>
+    <Comment>
+        A fun watch!
+    </Comment>
+  </Movie>
+  <Book href="https://www.oreilly.com/library/view/code-complete-2nd/0735619670/">
+    <Title>Code Complete, 2nd Edition</Title>
+    <Description>
+        Widely considered one of the best practical guides to
+        programming, Steve McConnell’s original CODE COMPLETE
+        has been helping developers write better software for
+        more than a decade. Now this classic book has been fully
+        updated and revised with leading-edge practices—and hundreds
+        of new code samples—illustrating the art and science of
+        software construction. Capturing the body of knowledge
+        available from research, academia, and everyday commercial
+        practice, McConnell synthesizes the most effective
+        techniques and must-know principles into clear, pragmatic
+        guidance. No matter what your experience level, development
+        environment, or project size, this book will inform and
+        stimulate your thinking—and help you build the highest
+        quality code.
+      </Description>
+    <Comment>
+        Very detailed explaination! Very informative!
+    </Comment>
+    <Pic>https://via.placeholder.com/250x350?text=book+screenshot+1</Pic>
+    <Pic>https://via.placeholder.com/250x350?text=book+screenshot+2</Pic>
+  </Book>
+</Page>
+`,
+          },
+          styles: {
+            scenery: `<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:template match="/">
+    <html>
+      <style>
+        section {
+          margin: 30px 0;
+        }
+      </style>
+      <body>
+        <h1>
+          第七次作业
+        </h1>
+        <xsl:apply-templates></xsl:apply-templates>
+      </body>
+    </html>
+  </xsl:template>
+  <xsl:template match="Page">
+    <h2>
+      <span>当前页面是“</span>
+      <xsl:value-of select="@name"></xsl:value-of>
+      <span>”页</span>
+    </h2>
+    <xsl:apply-templates></xsl:apply-templates>
+  </xsl:template>
+  <xsl:template match="Scene">
+    <section>
+      <h3>景观</h3>
+      <xsl:apply-templates select="Title"></xsl:apply-templates>
+      <xsl:apply-templates select="Comment"></xsl:apply-templates>
+      <xsl:apply-templates select="Description"></xsl:apply-templates>
+      <xsl:apply-templates select="Pic"></xsl:apply-templates>
+    </section>
+  </xsl:template>
+  <xsl:template match="Description">
+    <p>
+      <xsl:value-of select="text()"></xsl:value-of>
+    </p>
+  </xsl:template>
+  <xsl:template match="Title">
+    <h1>
+      <a>
+        <xsl:attribute name="href">
+          <xsl:value-of select="@href"></xsl:value-of>
+        </xsl:attribute>
+        <xsl:value-of select="text()"></xsl:value-of>
+      </a>
+    </h1>
+  </xsl:template>
+  <xsl:template match="Pic">
+      <img style="margin: 10px">
+        <xsl:attribute name="src">
+          <xsl:value-of select="text()"></xsl:value-of>
+        </xsl:attribute>
+      </img>
+  </xsl:template>
+</xsl:stylesheet>
+`,
+            about: `<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:template match="/">
+    <html>
+      <body>
+        <h1>
+          第七次作业
+        </h1>
+        <xsl:apply-templates></xsl:apply-templates>
+      </body>
+    </html>
+  </xsl:template>
+  <xsl:template match="Page">
+    <h2>
+      <span>当前页面是“</span>
+      <xsl:value-of select="@name"></xsl:value-of>
+      <span>”页</span>
+    </h2>
+    <p>
+      <xsl:value-of select="PageData/text()"></xsl:value-of>
+    </p>
+  </xsl:template>
+</xsl:stylesheet>`,
+            moviesBooksHobbies: `<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:template match="/">
+    <html>
+      <style>
+        section {
+          margin: 30px 0;
+        }
+      </style>
+      <body>
+        <h1>
+          第七次作业
+        </h1>
+        <xsl:apply-templates></xsl:apply-templates>
+      </body>
+    </html>
+  </xsl:template>
+  <xsl:template match="Page">
+    <h2>
+      <span>当前页面是“</span>
+      <xsl:value-of select="@name"></xsl:value-of>
+      <span>”页</span>
+    </h2>
+    <xsl:apply-templates></xsl:apply-templates>
+  </xsl:template>
+  <xsl:template match="Movie">
+    <section>
+      <h3>电影介绍</h3>
+      <xsl:apply-templates select="Title"></xsl:apply-templates>
+      <xsl:apply-templates select="Comment"></xsl:apply-templates>
+      <xsl:apply-templates select="Description"></xsl:apply-templates>
+      <xsl:apply-templates select="Pic"></xsl:apply-templates>
+    </section>
+  </xsl:template>
+  <xsl:template match="Book">
+    <section>
+      <h3>书籍介绍</h3>
+      <xsl:apply-templates select="Title"></xsl:apply-templates>
+      <xsl:apply-templates select="Comment"></xsl:apply-templates>
+      <xsl:apply-templates select="Description"></xsl:apply-templates>
+      <xsl:apply-templates select="Pic"></xsl:apply-templates>
+    </section>
+  </xsl:template>
+  <xsl:template match="Hobby">
+    <section>
+      <h3>爱好介绍</h3>
+      <xsl:apply-templates select="Title"></xsl:apply-templates>
+      <xsl:apply-templates select="Comment"></xsl:apply-templates>
+      <xsl:apply-templates select="Description"></xsl:apply-templates>
+    </section>
+  </xsl:template>
+  <xsl:template match="Comment">
+    <span>笔者按：</span>
+    <span>
+      <xsl:value-of select="text()"></xsl:value-of>
+    </span>
+  </xsl:template>
+  <xsl:template match="Description">
+    <p>
+      <xsl:value-of select="text()"></xsl:value-of>
+    </p>
+  </xsl:template>
+  <xsl:template match="Title">
+    <h1>
+      <a>
+        <xsl:attribute name="href">
+          <xsl:value-of select="@href"></xsl:value-of>
+        </xsl:attribute>
+        <xsl:value-of select="text()"></xsl:value-of>
+      </a>
+    </h1>
+  </xsl:template>
+  <xsl:template match="Pic">
+      <img style="margin: 10px">
+        <xsl:attribute name="src">
+          <xsl:value-of select="text()"></xsl:value-of>
+        </xsl:attribute>
+      </img>
+  </xsl:template>
+</xsl:stylesheet>
+`,
+          },
+        };
+      </script>
+      <script></script>
+    </section>
   </body>
 </html>
