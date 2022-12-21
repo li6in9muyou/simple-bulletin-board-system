@@ -127,6 +127,12 @@
         padding: 10px;
       }
     </style>
+    <style>
+      #ssg-comment-section {
+        outline: black 1px solid;
+        padding: 8px;
+      }
+    </style>
   </head>
   <body>
     <section id="firstAssignment">
@@ -1555,6 +1561,84 @@ ul {
     </section>
     <section id="staticSiteGenerator">
       <h1>第七次作业，静态网站生成器</h1>
+      <section id="ssg-comment-section">
+        <h1>评论区</h1>
+        <ol data-ssg-comments-list></ol>
+        <label for="ssg-nickname">网名</label>
+        <input
+          type="text"
+          id="ssg-nickname"
+          required
+          minlength="1"
+          maxlength="20"
+          data-ssg-comment-nickname
+        />
+        <label for="ssg-comment">留言</label>
+        <textarea
+          id="ssg-comment"
+          data-ssg-comment-text
+          minlength="1"
+          maxlength="200"
+          required
+        ></textarea>
+        <button data-ssg-comment-send>发送</button>
+        <script>
+          const domCommentsList = document.querySelector(
+            "[data-ssg-comments-list]"
+          );
+          function addCommentToView(nickname, text) {
+            const comment = document.createElement("li");
+            comment.innerText = `“${nickname}”说：${text}`;
+            domCommentsList.appendChild(comment);
+          }
+
+          const domCommentNickname = document.querySelector(
+            "[data-ssg-comment-nickname]"
+          );
+          const domCommentText = document.querySelector(
+            "[data-ssg-comment-text]"
+          );
+          function inputNickname() {
+            return domCommentNickname.value;
+          }
+          function inputText() {
+            return domCommentText.value;
+          }
+          function clearInput() {
+            domCommentNickname.value = "";
+            domCommentText.value = "";
+          }
+        </script>
+        <script type="module">
+          import PocketBase from "https://cdn.jsdelivr.net/npm/pocketbase@0.9.0/dist/pocketbase.es.mjs";
+          const pb = new PocketBase("https://stocky-candle.pockethost.io");
+          const commentsModel = pb.collection("comments");
+          commentsModel.subscribe("*", (e) => {
+            addCommentToView(e.record.nickname, e.record.text);
+          });
+          for (const item of (await commentsModel.getList(1, 20)).items) {
+            addCommentToView(item.nickname, item.text);
+          }
+          const domCommentSend = document.querySelector(
+            "[data-ssg-comment-send]"
+          );
+          domCommentSend.addEventListener("click", () => {
+            domCommentSend.disabled = true;
+            try {
+              commentsModel.create({
+                nickname: inputNickname(),
+                text: inputText(),
+              });
+              clearInput();
+            } catch (e) {
+              console.warn("not implemented");
+              console.warn(e);
+            } finally {
+              domCommentSend.disabled = false;
+            }
+          });
+        </script>
+      </section>
       <p>
         网页设计风格为极简主义，根据站点的内容特点，选择采用文字优先设计，为访客提供良好的文字阅读体验。
       </p>
