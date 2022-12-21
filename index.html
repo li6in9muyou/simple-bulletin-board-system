@@ -1229,13 +1229,15 @@
             .then((resp) => resp.text())
             .then((text) => {
               const preview = document.createElement("iframe");
-              document.querySelector(previewContainer).replaceChildren(preview);
-              preview.contentWindow.document.write(text);
-
               preview.style.border = "none";
-              preview.contentDocument.documentElement.style.overflow = "hidden";
-              preview.height = `${preview.contentDocument.body.scrollHeight}`;
-              preview.width = `${preview.contentDocument.body.scrollWidth}`;
+              preview.srcdoc = text;
+              preview.onload = () => {
+                preview.width = "800px";
+                preview.height = `${
+                  preview.contentDocument.body.scrollHeight + 100
+                }px`;
+              };
+              document.querySelector(previewContainer).replaceChildren(preview);
             });
         }
       </script>
