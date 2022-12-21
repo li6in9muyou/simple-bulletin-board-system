@@ -1553,6 +1553,15 @@ ul {
       <p>
         待写：说明网页的设计、开发和测试；描述如何实现数据与显示页面相互分离；解释如何实现活动操作；
       </p>
+      <nav>
+        <label for="ssg-page">切换页面：</label>
+        <select id="ssg-page" data-ssg-page-select>
+          <option value="ssg-about" selected>自我介绍</option>
+          <option value="ssg-bmh">书籍、电影、爱好</option>
+          <option value="ssg-scenery">景观</option>
+        </select>
+      </nav>
+      <main id="ssg-view"></main>
       <script>
         const Server = {
           pages: {
@@ -1821,7 +1830,29 @@ Sed eu aliquet urna. Curabitur ornare ante vehicula lorem rhoncus maximus. Vivam
           },
         };
       </script>
-      <script></script>
+      <script>
+        const pageLookUp = new Map([
+          ["ssg-scenery", "scenery"],
+          ["ssg-bmh", "moviesBooksHobbies"],
+          ["ssg-about", "about"],
+        ]);
+        function fetchPage(pageId) {
+          const id = pageLookUp.get(pageId);
+          if (id === undefined) {
+            console.error(`no such page with pageId of ${pageId}`);
+            return;
+          }
+          const XML = Server.pages[id];
+          const XSL = Server.styles[id];
+          renderPreview(XML, XSL, "#ssg-view");
+        }
+        fetchPage("ssg-about");
+        document
+          .querySelector("[data-ssg-page-select]")
+          .addEventListener("change", (e) => {
+            fetchPage(e.target.value);
+          });
+      </script>
     </section>
   </body>
 </html>
