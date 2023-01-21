@@ -1583,17 +1583,25 @@ ul {
         ></textarea>
         <button data-ssg-comment-send>发送</button>
         <script>
-          const domCommentsList = document.querySelector(
-            "[data-ssg-comments-list]"
-          );
-          function addCommentToView(nickname, text, ...remarks) {
-            const comment = document.createElement("li");
-            comment.innerText = `“${nickname}”说：${text}`;
-            remarks = remarks.filter((x) => Boolean(x));
-            if (remarks.length > 0) {
-              comment.innerText += `（备注：${remarks.join("，")}）`;
+          function addCommentToView(comment) {
+            const domCommentsList = document.querySelector(
+              "[data-ssg-comments-list]"
+            );
+            function addCommentToViewHelper(nickname, text, ...remarks) {
+              const comment = document.createElement("li");
+              comment.innerText = `“${nickname}”说：${text}`;
+              remarks = remarks.filter((x) => Boolean(x));
+              if (remarks.length > 0) {
+                comment.innerText += `（备注：${remarks.join("，")}）`;
+              }
+              domCommentsList.appendChild(comment);
             }
-            domCommentsList.appendChild(comment);
+            addCommentToViewHelper(
+              comment.nickname,
+              comment.text,
+              comment.isAdmin ? "发言者身份已认证" : "",
+              `发表于${new Date(comment.created).toLocaleString()}`
+            );
           }
 
           const domCommentNickname = document.querySelector(
@@ -1618,21 +1626,9 @@ ul {
           const pb = new PocketBase("https://stocky-candle.pockethost.io");
           const commentsModel = pb.collection("comments");
           commentsModel.subscribe("*", (e) => {
-            addCommentToView(
-              e.record.nickname,
-              e.record.text,
-              e.record.isAdmin ? "发言者身份已认证" : "",
-              `发表于${new Date(e.record.created).toLocaleString()}`
-            );
+            addCommentToView(e.record);
           });
-          for (const item of (await commentsModel.getList(1, 20)).items) {
-            addCommentToView(
-              item.nickname,
-              item.text,
-              item.isAdmin ? "发言者身份已认证" : "",
-              `发表于${new Date(item.created).toLocaleString()}`
-            );
-          }
+          (await commentsModel.getList(1, 20)).items.map(addCommentToView);
           const domCommentSend = document.querySelector(
             "[data-ssg-comment-send]"
           );
