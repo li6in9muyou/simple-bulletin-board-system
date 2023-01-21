@@ -1573,6 +1573,15 @@ ul {
           maxlength="20"
           data-ssg-comment-nickname
         />
+        <label for="ssg-challenge">身份认证密码（可不填）</label>
+        <input
+          type="password"
+          id="ssg-challenge"
+          minlength="1"
+          maxlength="20"
+          pattern="[0-9a-z]+"
+          data-ssg-challenge
+        />
         <label for="ssg-comment">留言</label>
         <textarea
           id="ssg-comment"
@@ -1596,14 +1605,22 @@ ul {
               }
               domCommentsList.appendChild(comment);
             }
+            function isAdmin(comment) {
+              return (
+                comment.isVerified !== "" &&
+                comment.expand.isVerified.isVerified
+              );
+            }
             addCommentToViewHelper(
               comment.nickname,
               comment.text,
-              comment.isAdmin ? "发言者身份已认证" : "",
+              isAdmin(comment) ? "发言者身份已认证" : "",
               `发表于${new Date(comment.created).toLocaleString()}`
             );
           }
-
+          const domCommentVerificationChallenge = document.querySelector(
+            "[data-ssg-challenge]"
+          );
           const domCommentNickname = document.querySelector(
             "[data-ssg-comment-nickname]"
           );
@@ -1615,6 +1632,9 @@ ul {
           }
           function inputText() {
             return domCommentText.value;
+          }
+          function verificationChallenge() {
+            return domCommentVerificationChallenge.value;
           }
           function clearInput() {
             domCommentNickname.value = "";
@@ -1628,18 +1648,52 @@ ul {
           commentsModel.subscribe("*", (e) => {
             addCommentToView(e.record);
           });
-          (await commentsModel.getList(1, 20)).items.map(addCommentToView);
+          (
+            await commentsModel.getList(1, 20, { expand: "isVerified" })
+          ).items.map(addCommentToView);
           const domCommentSend = document.querySelector(
             "[data-ssg-comment-send]"
           );
+
+          function createUnverifiedComment() {
+            pb.collection("is_comment_verified")
+              .create({
+                isVerified: false,
+              })
+              .then((token) => {
+                commentsModel.create({
+                  nickname: inputNickname(),
+                  text: inputText(),
+                  isVerified: token.id,
+                });
+              })
+              .catch(createUnverifiedComment);
+          }
+
+          function createVerifiedComment() {
+            pb.collection("is_comment_verified")
+              .create({
+                challenge: verificationChallenge(),
+                isVerified: true,
+              })
+              .then((token) => {
+                commentsModel.create({
+                  nickname: inputNickname(),
+                  text: inputText(),
+                  isVerified: token.id,
+                });
+              })
+              .catch(createUnverifiedComment);
+          }
+
           domCommentSend.addEventListener("click", () => {
             domCommentSend.disabled = true;
             try {
-              commentsModel.create({
-                nickname: inputNickname(),
-                text: inputText(),
-              });
-              clearInput();
+              if (verificationChallenge() === "") {
+                createUnverifiedComment();
+              } else {
+                createVerifiedComment();
+              }
             } catch (e) {
               console.warn("not implemented");
               console.warn(e);
