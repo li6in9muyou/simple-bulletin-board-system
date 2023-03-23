@@ -60,33 +60,56 @@
     </nav>
     <section id="ssg-comment-section">
       <ul class="list-group" data-ssg-comments-list></ul>
-      <label for="ssg-nickname">网名</label>
-      <input
-        type="text"
-        id="ssg-nickname"
-        required
-        minlength="1"
-        maxlength="20"
-        data-ssg-comment-nickname
-      />
-      <label for="ssg-challenge">身份认证密码（可不填）</label>
-      <input
-        type="password"
-        id="ssg-challenge"
-        minlength="1"
-        maxlength="20"
-        pattern="[0-9a-z]+"
-        data-ssg-challenge
-      />
-      <label for="ssg-comment">留言</label>
-      <textarea
-        id="ssg-comment"
-        data-ssg-comment-text
-        minlength="1"
-        maxlength="200"
-        required
-      ></textarea>
-      <button class="btn btn-primary" data-ssg-comment-send>发送</button>
+      <form class="px-4 my-2">
+        <div class="row align-items-center">
+          <div class="col">
+            <label for="username">网名</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              required
+              minlength="1"
+              maxlength="20"
+              data-ssg-comment-nickname
+            />
+          </div>
+          <div class="col">
+            <label for="auth-code">身份认证密码（可不填）</label>
+            <input
+              type="password"
+              class="form-control"
+              id="auth-code"
+              minlength="1"
+              maxlength="20"
+              pattern="[0-9a-z]+"
+              data-ssg-challenge
+            />
+          </div>
+          <div class="col">
+            <label for="send-comment">确认发送</label>
+            <button
+              id="send-comment"
+              type="submit"
+              class="btn btn-primary w-100"
+              data-ssg-comment-send
+            >
+              发送
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="comment-text">留言</label>
+          <textarea
+            data-ssg-comment-text
+            class="form-control"
+            id="comment-text"
+            minlength="1"
+            maxlength="200"
+            required
+          ></textarea>
+        </div>
+      </form>
       <script>
         function addCommentToView(comment) {
           const domCommentsList = document.querySelector(
@@ -199,7 +222,8 @@ ${comment.text}
             .catch(createUnverifiedComment);
         }
 
-        domCommentSend.addEventListener("click", () => {
+        domCommentSend.addEventListener("click", (e) => {
+          e.preventDefault();
           domCommentSend.disabled = true;
           try {
             if (verificationChallenge() === "") {
