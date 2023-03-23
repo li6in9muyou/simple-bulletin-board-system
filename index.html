@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>XML作业汇总</title>
     <link
       rel="prefetch"
       as="style"
@@ -17,156 +16,153 @@
     <title>公共留言板</title>
   </head>
   <body>
-    <section id="staticSiteGenerator">
-      <h1>公共留言板</h1>
-      <section id="ssg-comment-section">
-        <h1>评论区</h1>
-        <ol data-ssg-comments-list></ol>
-        <label for="ssg-nickname">网名</label>
-        <input
-          type="text"
-          id="ssg-nickname"
-          required
-          minlength="1"
-          maxlength="20"
-          data-ssg-comment-nickname
-        />
-        <label for="ssg-challenge">身份认证密码（可不填）</label>
-        <input
-          type="password"
-          id="ssg-challenge"
-          minlength="1"
-          maxlength="20"
-          pattern="[0-9a-z]+"
-          data-ssg-challenge
-        />
-        <label for="ssg-comment">留言</label>
-        <textarea
-          id="ssg-comment"
-          data-ssg-comment-text
-          minlength="1"
-          maxlength="200"
-          required
-        ></textarea>
-        <button data-ssg-comment-send>发送</button>
-        <script>
-          function addCommentToView(comment) {
-            const domCommentsList = document.querySelector(
-              "[data-ssg-comments-list]"
-            );
-            function addCommentToViewHelper(nickname, text, ...remarks) {
-              const comment = document.createElement("li");
-              comment.innerText = `“${nickname}”说：${text}`;
-              remarks = remarks.filter((x) => Boolean(x));
-              if (remarks.length > 0) {
-                comment.innerText += `（备注：${remarks.join("，")}）`;
-              }
-              domCommentsList.appendChild(comment);
+    <h1>公共留言板</h1>
+    <section id="ssg-comment-section">
+      <h1>评论区</h1>
+      <ol data-ssg-comments-list></ol>
+      <label for="ssg-nickname">网名</label>
+      <input
+        type="text"
+        id="ssg-nickname"
+        required
+        minlength="1"
+        maxlength="20"
+        data-ssg-comment-nickname
+      />
+      <label for="ssg-challenge">身份认证密码（可不填）</label>
+      <input
+        type="password"
+        id="ssg-challenge"
+        minlength="1"
+        maxlength="20"
+        pattern="[0-9a-z]+"
+        data-ssg-challenge
+      />
+      <label for="ssg-comment">留言</label>
+      <textarea
+        id="ssg-comment"
+        data-ssg-comment-text
+        minlength="1"
+        maxlength="200"
+        required
+      ></textarea>
+      <button data-ssg-comment-send>发送</button>
+      <script>
+        function addCommentToView(comment) {
+          const domCommentsList = document.querySelector(
+            "[data-ssg-comments-list]"
+          );
+          function addCommentToViewHelper(nickname, text, ...remarks) {
+            const comment = document.createElement("li");
+            comment.innerText = `“${nickname}”说：${text}`;
+            remarks = remarks.filter((x) => Boolean(x));
+            if (remarks.length > 0) {
+              comment.innerText += `（备注：${remarks.join("，")}）`;
             }
-            function isAdmin(comment) {
-              return (
-                comment.isVerified !== "" &&
-                comment.expand.isVerified.isVerified
-              );
-            }
-            addCommentToViewHelper(
-              comment.nickname,
-              comment.text,
-              isAdmin(comment) ? "发言者身份已认证" : "",
-              `发表于${new Date(comment.created).toLocaleString()}`
+            domCommentsList.appendChild(comment);
+          }
+          function isAdmin(comment) {
+            return (
+              comment.isVerified !== "" && comment.expand.isVerified.isVerified
             );
           }
-          const domCommentVerificationChallenge = document.querySelector(
-            "[data-ssg-challenge]"
+          addCommentToViewHelper(
+            comment.nickname,
+            comment.text,
+            isAdmin(comment) ? "发言者身份已认证" : "",
+            `发表于${new Date(comment.created).toLocaleString()}`
           );
-          const domCommentNickname = document.querySelector(
-            "[data-ssg-comment-nickname]"
-          );
-          const domCommentText = document.querySelector(
-            "[data-ssg-comment-text]"
-          );
-          function inputNickname() {
-            return domCommentNickname.value;
-          }
-          function inputText() {
-            return domCommentText.value;
-          }
-          function verificationChallenge() {
-            return domCommentVerificationChallenge.value;
-          }
-          function clearInput() {
-            domCommentNickname.value = "";
-            domCommentText.value = "";
-          }
-        </script>
-        <script type="module">
-          import PocketBase from "https://cdn.jsdelivr.net/npm/pocketbase@0.10/dist/pocketbase.es.mjs";
-          const pb = new PocketBase("https://stocky-candle.pockethost.io");
-          const commentsModel = pb.collection("comments");
-          commentsModel.subscribe("*", (e) => {
-            const comment = e.record;
-            pb.collection("is_comment_verified")
-              .getOne(comment.isVerified)
-              .then((token) => {
-                comment.expand.isVerified = token;
-                addCommentToView(comment);
+        }
+        const domCommentVerificationChallenge = document.querySelector(
+          "[data-ssg-challenge]"
+        );
+        const domCommentNickname = document.querySelector(
+          "[data-ssg-comment-nickname]"
+        );
+        const domCommentText = document.querySelector(
+          "[data-ssg-comment-text]"
+        );
+        function inputNickname() {
+          return domCommentNickname.value;
+        }
+        function inputText() {
+          return domCommentText.value;
+        }
+        function verificationChallenge() {
+          return domCommentVerificationChallenge.value;
+        }
+        function clearInput() {
+          domCommentNickname.value = "";
+          domCommentText.value = "";
+        }
+      </script>
+      <script type="module">
+        import PocketBase from "https://cdn.jsdelivr.net/npm/pocketbase@0.10/dist/pocketbase.es.mjs";
+        const pb = new PocketBase("https://stocky-candle.pockethost.io");
+        const commentsModel = pb.collection("comments");
+        commentsModel.subscribe("*", (e) => {
+          const comment = e.record;
+          pb.collection("is_comment_verified")
+            .getOne(comment.isVerified)
+            .then((token) => {
+              comment.expand.isVerified = token;
+              addCommentToView(comment);
+            });
+        });
+        (
+          await commentsModel.getList(1, 20, { expand: "isVerified" })
+        ).items.map(addCommentToView);
+        const domCommentSend = document.querySelector(
+          "[data-ssg-comment-send]"
+        );
+
+        function createUnverifiedComment() {
+          pb.collection("is_comment_verified")
+            .create({
+              isVerified: false,
+            })
+            .then((token) => {
+              commentsModel.create({
+                nickname: inputNickname(),
+                text: inputText(),
+                isVerified: token.id,
               });
-          });
-          (
-            await commentsModel.getList(1, 20, { expand: "isVerified" })
-          ).items.map(addCommentToView);
-          const domCommentSend = document.querySelector(
-            "[data-ssg-comment-send]"
-          );
+            })
+            .catch(createUnverifiedComment);
+        }
 
-          function createUnverifiedComment() {
-            pb.collection("is_comment_verified")
-              .create({
-                isVerified: false,
-              })
-              .then((token) => {
-                commentsModel.create({
-                  nickname: inputNickname(),
-                  text: inputText(),
-                  isVerified: token.id,
-                });
-              })
-              .catch(createUnverifiedComment);
-          }
+        function createVerifiedComment() {
+          pb.collection("is_comment_verified")
+            .create({
+              challenge: verificationChallenge(),
+              isVerified: true,
+            })
+            .then((token) => {
+              commentsModel.create({
+                nickname: inputNickname(),
+                text: inputText(),
+                isVerified: token.id,
+              });
+            })
+            .catch(createUnverifiedComment);
+        }
 
-          function createVerifiedComment() {
-            pb.collection("is_comment_verified")
-              .create({
-                challenge: verificationChallenge(),
-                isVerified: true,
-              })
-              .then((token) => {
-                commentsModel.create({
-                  nickname: inputNickname(),
-                  text: inputText(),
-                  isVerified: token.id,
-                });
-              })
-              .catch(createUnverifiedComment);
-          }
-
-          domCommentSend.addEventListener("click", () => {
-            domCommentSend.disabled = true;
-            try {
-              if (verificationChallenge() === "") {
-                createUnverifiedComment();
-              } else {
-                createVerifiedComment();
-              }
-            } catch (e) {
-              console.warn("not implemented");
-              console.warn(e);
-            } finally {
-              domCommentSend.disabled = false;
+        domCommentSend.addEventListener("click", () => {
+          domCommentSend.disabled = true;
+          try {
+            if (verificationChallenge() === "") {
+              createUnverifiedComment();
+            } else {
+              createVerifiedComment();
             }
-          });
-        </script>
-      </section>
+          } catch (e) {
+            console.warn("not implemented");
+            console.warn(e);
+          } finally {
+            domCommentSend.disabled = false;
+          }
+        });
+      </script>
     </section>
   </body>
 </html>
