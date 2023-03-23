@@ -132,13 +132,13 @@
 <div>
 ${
   isAdmin(comment)
-    ? `<span class="badge bg-success rounded-pill">已认证身份</span>`
-    : `<span class="badge bg-secondary rounded-pill">不可靠</span>`
+    ? `<h6 class="badge bg-success rounded-pill">已认证身份</h6>`
+    : `<h6 class="badge bg-secondary rounded-pill">不可靠</h6>`
 }
 </div>
 </div>
 <p class="mt-2 mb-0">
-<pre style="white-space: pre-wrap;">
+<pre style="white-space: pre-wrap;" class="fs-5">
 ${comment.text}
 </pre>
 </p>
