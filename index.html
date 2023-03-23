@@ -59,8 +59,7 @@
       </div>
     </nav>
     <section id="ssg-comment-section">
-      <h1>评论区</h1>
-      <ol data-ssg-comments-list></ol>
+      <ul class="list-group" data-ssg-comments-list></ul>
       <label for="ssg-nickname">网名</label>
       <input
         type="text"
@@ -87,31 +86,43 @@
         maxlength="200"
         required
       ></textarea>
-      <button data-ssg-comment-send>发送</button>
+      <button class="btn btn-primary" data-ssg-comment-send>发送</button>
       <script>
         function addCommentToView(comment) {
           const domCommentsList = document.querySelector(
             "[data-ssg-comments-list]"
           );
-          function addCommentToViewHelper(nickname, text, ...remarks) {
-            const comment = document.createElement("li");
-            comment.innerText = `“${nickname}”说：${text}`;
-            remarks = remarks.filter((x) => Boolean(x));
-            if (remarks.length > 0) {
-              comment.innerText += `（备注：${remarks.join("，")}）`;
-            }
-            domCommentsList.appendChild(comment);
-          }
           function isAdmin(comment) {
             return (
               comment.isVerified !== "" && comment.expand.isVerified.isVerified
             );
           }
-          addCommentToViewHelper(
-            comment.nickname,
-            comment.text,
-            isAdmin(comment) ? "发言者身份已认证" : "",
-            `发表于${new Date(comment.created).toLocaleString()}`
+          const htmlText = `
+<li class="list-group-item">
+<div class="d-flex justify-content-between">
+<div>
+  <h6 class="mb-0 fw-bold">${comment.nickname}</h6>
+  <small class="text-muted">
+    ${new Date(comment.created).toLocaleString()}
+  </small>
+</div>
+<div>
+${
+  isAdmin(comment)
+    ? `<span class="badge bg-success rounded-pill">已认证身份</span>`
+    : `<span class="badge bg-secondary rounded-pill">不可靠</span>`
+}
+</div>
+</div>
+<p class="mt-2 mb-0">
+<pre style="white-space: pre-wrap;">
+${comment.text}
+</pre>
+</p>
+</li>
+`;
+          domCommentsList.appendChild(
+            document.createRange().createContextualFragment(htmlText)
           );
         }
         const domCommentVerificationChallenge = document.querySelector(
