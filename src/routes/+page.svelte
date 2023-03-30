@@ -1,2 +1,10 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+	import Piece from '$components/Piece.svelte';
+	export let data;
+</script>
+
+<ul class="list-group px-1">
+	{#each data.comments as comment}
+		<Piece {comment} />
+	{/each}
+</ul>
