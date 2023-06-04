@@ -13,7 +13,7 @@
 	}
 
 	function inputText() {
-		return domCommentText.value;
+		return encodeURIComponent(domCommentText.value);
 	}
 
 	function verificationChallenge() {

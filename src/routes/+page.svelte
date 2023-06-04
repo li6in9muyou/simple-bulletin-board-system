@@ -1,5 +1,6 @@
 <script>
 	import Piece from '$components/Piece.svelte';
+	import CommentInput from '$components/CommentInput.svelte';
 	export let data;
 </script>
 
@@ -8,3 +9,5 @@
 		<Piece {comment} />
 	{/each}
 </ul>
+
+<CommentInput />
